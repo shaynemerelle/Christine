@@ -294,7 +294,7 @@ http://www.templatemo.com/tm-472-blaster
 			</div>
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
-					<form action="#" method="post">
+					<form id="emailForm">
 						<div class="col-md-6 col-sm-6">
 							<input name="name" type="text" class="form-control" id="name" placeholder="Name">
 							<input name="email" type="email" class="form-control" id="email" placeholder="Email">
@@ -355,7 +355,38 @@ http://www.templatemo.com/tm-472-blaster
 	<script src="js/nivo-lightbox.min.js"></script>
 	<script src="js/wow.min.js"></script>
 	<script src="js/custom.js"></script>
+<!-- 🚀 n8n webhook email sender -->
+<script>
+	document.getElementById('emailForm').addEventListener('submit', async function (e) {
+		e.preventDefault();
 
+		const data = {
+			name: document.getElementById('name').value,
+			email: document.getElementById('email').value,
+			subject: document.getElementById('subject').value,
+			message: document.getElementById('message').value
+		};
+
+		const webhookUrl = 'https://cgtechautomations.app.n8n.cloud/webhook/send-email'; // 🔁 Replace this
+
+		try {
+			const res = await fetch(webhookUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(data)
+			});
+
+			if (res.ok) {
+				alert('Message sent!');
+				document.getElementById('emailForm').reset();
+			} else {
+				alert('Something went wrong.');
+			}
+		} catch (err) {
+			console.error(err);
+			alert('Failed to send. Please try again later.');
+		}
+	});
+</script>
 </body>
-
 </html>
